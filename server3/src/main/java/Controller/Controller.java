@@ -26,6 +26,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/*date: 02/12/2019
+*author : jiyoon
+* */
 @org.springframework.stereotype.Controller
 public class Controller {
 
@@ -38,13 +41,13 @@ public class Controller {
     @RequestMapping(name="/uploadFilepost", method=RequestMethod.POST)
     public String uploadFile(HttpServletRequest request, @RequestParam("files") MultipartFile files
             , Model model){
-        String savePath = request.getRealPath("folder"); // 파일이 저장될 프로젝트 안의 폴더 경로
+        String savePath = request.getRealPath("folder"); // file path in the project
         System.out.println("savepath"+savePath);
-        String originalFilename = files.getOriginalFilename(); // fileName.jpg
+        String originalFilename = files.getOriginalFilename(); // ex) fileName.jpg
         String onlyFileName = originalFilename.substring(0, originalFilename.indexOf(".")); // fileName
         String extension = originalFilename.substring(originalFilename.indexOf(".")); // .jpg
 
-        String rename = onlyFileName + "_" + getCurrentDayTime() + extension; // fileName_20150721-14-07-50.jpg
+        String rename = onlyFileName + "_" + getCurrentDayTime() + extension; // ex) fileName_20150721-14-07-50.jpg
         String fullPath = savePath + "\\" + rename;
 
         if (!files.isEmpty()) {
@@ -53,12 +56,12 @@ public class Controller {
                 BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(fullPath)));
                 stream.write(bytes);
                 stream.close();
-                model.addAttribute("resultMsg", "파일을 업로드 성공!");
+                model.addAttribute("resultMsg", "file upload success!");
             } catch (Exception e) {
-                model.addAttribute("resultMsg", "파일을 업로드하는 데에 실패했습니다.");
+                model.addAttribute("resultMsg", "file upload failed.");
             }
         } else {
-            model.addAttribute("resultMsg", "업로드할 파일을 선택해주시기 바랍니다.");
+            model.addAttribute("resultMsg", "select the file");
         }
 
         return "index";
